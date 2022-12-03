@@ -46,6 +46,8 @@
 
 ### 最后一个点：cookie篡改
 
+就是利用刚刚发现的cookie并进行篡改和解密
+
 也没什么有意思的，挺简单，
 
     https://crackstation.net/
