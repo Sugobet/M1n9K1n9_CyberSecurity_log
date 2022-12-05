@@ -28,4 +28,17 @@
     设置rule的时候-> scope可以指定那个选项卡中生效 如: repeater、intruder......
 
 
-learning...
+### 
+
+decoder、comparer、sequencer，比较简单
+
+前两者顾名思义，比较简单；sequencer主要可以实时自动捕获、手动加载http中随机变化的token，通过大量的token数据进行分析
+
+
+### burp扩展
+
+tryhackme推荐了两个插件：request timer可以计算收到响应的时间，作用就是方便类似时间盲注的场景下做判断
+
+logger++可以实时捕获、查看http请求，类似浏览器的network模块，好用
+
+
