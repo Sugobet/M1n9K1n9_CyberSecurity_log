@@ -32,12 +32,15 @@ whois、https://dnsdumpster.com/、nslookup的使用，侦察网站的公开信�
 
     nmap -sn -PA <PORT>，tcp ack扫描
 
+默认扫80端口
+
 syn ping不需要账号特权，ack ping需要
 
 ### udp探测
 
+    nmap -sn -PU <PORT>， udp扫描
+    默认扫随机的奇葩端口
+
 tryhackme提到一个点就是如果目标主机不在线，那么向它的udp端口发送udp包，此时我们是无法获得任何响应的，很简单，因为目标主机不在线；但如果目标主机在线，并且存在 端口状态是关闭的udp端口，此时我们发送udp数据包，是可以获得响应的。
 
 这样，就可以根据有没有响应来判断目标是否在线
-
-
