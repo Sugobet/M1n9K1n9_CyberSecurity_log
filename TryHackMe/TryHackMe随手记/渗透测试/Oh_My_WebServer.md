@@ -106,3 +106,7 @@ PORT   STATE SERVICE
                  
     THM{7f147ef1f36da9ae29529890a1b6011f}
 
+
+CVE-2021-38647 解读文献：https://www.wiz.io/blog/omigod-critical-vulnerabilities-in-omi-azure
+
+<img src="https://www.datocms-assets.com/75231/1659892098-omigod-9.gif?fm=webp">
