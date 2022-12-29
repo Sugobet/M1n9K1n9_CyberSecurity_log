@@ -15,4 +15,11 @@
 
 
 ---
+
 2022/12/14 ------我已经把thm比较多的有关渗透测试的中、容易难度的room都做了很多，还有关于web、linux、linux提权方面的room。学习到非常多东西。。。虽然有很多room我都没有写wp，我会补回来的，就当复习吧
+
+---
+
+2022/12/29 ------我把进攻性渗透测试path完成了，因此我获得第二个证书。我学会了许多东西，其中包括最重要的AD，甚至克服了困难把栈溢出学明白了，那么接下来我将会进行大量的复习巩固、做相应的room、做相应的实验室、提升。之后我会开始进军《Red Teming》
+
+<img src='https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-V2RGB1OISB.png' alt='tryhackme' />
