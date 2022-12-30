@@ -54,6 +54,8 @@ root.txt在administrator的桌面下
 
 将Lab用户这一行单拎出来用john爆破：
 
-    john --wordlist=/usr/share/wordlists/rockyou.txt ./hash
+    john --wordlist=/usr/share/wordlists/rockyou.txt ./hash --format=NT
 
 即可爆出明文密码
+
+爆不出来也可以试试：https://crackstation.net/
