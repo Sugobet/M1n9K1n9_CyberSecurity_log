@@ -78,7 +78,7 @@ base64解码后，确认这就是我们登录的凭据
 
 由于前面的网页中我们看见了mark用户，所以我们选择爆破mark
 
-hydra -l mark -P /usr/share/wordlists/rockyou.txt -f admin.ironcorp.me -s 11025 http-get /
+    hydra -l mark -P /usr/share/wordlists/rockyou.txt -f admin.ironcorp.me -s 11025 http-get /
 
 好像爆不出来，也没别的信息了，再尝试爆最有可能的admin
 
