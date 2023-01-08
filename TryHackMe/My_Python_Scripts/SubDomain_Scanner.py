@@ -9,20 +9,26 @@ subdomain_path = sys.argv[2]
 timeout = float(sys.argv[3])
 thread_num = int(sys.argv[4])
 
+fuck_length = str(input('Input Fuck length (split ","):')).split(',')
+
 thread_list = []
 
 
 def scan(*subList):
     to = timeout
     for sub in subList:
-        sub_domains = f"http://{sub.strip()}.{domain}" 
+        b_domains = f"http://{domain}"
+        sub_d = f'{sub.strip()}.{domain}'
+        headers = {'Host': sub_d}
 
         try:
-            requests.get(sub_domains, timeout=to)
+            res = requests.get(b_domains, headers=headers, allow_redirects=False, timeout=to)
+            if fuck_length == []:
+                print(f'length:{len(res.text)}')
+            elif str(len(res.text)) not in fuck_length:
+                print(f"Length:{len(res.text)} :Valid domain:{sub_d}")
         except Exception:
             pass
-        else:
-            print("Valid domain: ",sub_domains)
 
 
 if __name__ == "__main__":
