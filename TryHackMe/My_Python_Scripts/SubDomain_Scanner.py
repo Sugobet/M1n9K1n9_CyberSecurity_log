@@ -19,7 +19,7 @@ def scan(*subList):
 
         try:
             requests.get(sub_domains, timeout=to)
-        except requests.ConnectionError:
+        except Exception:
             pass
         else:
             print("Valid domain: ",sub_domains)
