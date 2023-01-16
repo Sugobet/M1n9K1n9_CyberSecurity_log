@@ -294,6 +294,8 @@ user.txt:
     echo "<li class='nav-item'>
         <a class='nav-link' href=''>fla6{7H@T*********149}</a>
 
+## 权限提升
+
 在根目录下发现了：
 
     daemon@labyrinth:/timers$ ls -la
@@ -346,3 +348,9 @@ root.txt:
     bash-4.4# cat /root/da_king_flek.txt 
     cat /root/da_king_flek.txt
     fL4G{YoU_*******9ra7$}
+
+## 补充
+
+对于echo.php，我在想如何找到它，因为gobuster可能无法扫的出来又或者非常麻烦，因为非管理员访问echo.php会302跳转走。其实我们可以使用python，requests禁止重定向，然后判断截获所有302的响应，判断响应体的length是否大于0，也就是判断响应体是否有数据，有数据，那么大概率该页面是存在的，这样我们就可以在未登录的情况下扫描到类似echo.php的页面文件了
+
+事后我还去多了解了一下302重定向，大致跟这里差不多
