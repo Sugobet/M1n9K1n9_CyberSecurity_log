@@ -23,3 +23,9 @@
 2022/12/29 ------我把进攻性渗透测试path完成了，因此我获得第二个证书。我学会了许多东西，其中包括最重要的AD，甚至克服了困难把栈溢出学明白了，那么接下来我将会进行大量的复习巩固、做相应的room、做相应的实验室、提升。之后我会开始进军《Red Teming》
 
 <img src='https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-V2RGB1OISB.png' alt='tryhackme' />
+
+---
+
+2023/1/22 ------自完成进攻性渗透测试到现在的这一个月里，我做了挺多room，Windows的、AD的、linux的、以及web，由于windows方面的room比较少，所以大多数时候都是以翻看笔记复习以达到目的，对于web，最近做的比较多，很多都是中等难度的题，因为web是一个非常重要的技能之一。此外也学习了许多其他方面的点。
+
+现在，开始进攻红队路径
