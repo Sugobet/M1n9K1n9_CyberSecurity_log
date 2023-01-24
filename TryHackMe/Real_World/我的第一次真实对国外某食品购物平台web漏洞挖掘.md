@@ -45,7 +45,7 @@
 
 当我尝试修改redirect参数，改成百度：
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/1f89210d99db4545814f1c851143d2cf.png)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/4f721858272045039d792e236ecb25be.png)
 
 在已登录状态下，确实重定向到百度去了
 
@@ -176,5 +176,3 @@ OpenRedirect Payload:
 ---
 
 不说了，跑路了
-
-
