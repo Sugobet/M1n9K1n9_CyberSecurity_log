@@ -62,3 +62,56 @@
 回到刚刚的地图搜索，我们可以知道，有四个 站台
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/43b8240a78444aae9357740e56caad56.png)
+
+## 挑战3
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/d146972ff3584f42b0cd710b8aa50d12.png)
+
+在那个广告牌中给出了信息：YVR以及yvr.ca这个疑似url的东西。
+
+并且可以判断还有推特、脸书等社交平台账号
+
+图片中呈现了这是一个用餐的位置
+
+访问yvr.ca：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/7f5869d6fb3341f1a392812638e6b2c7.png)
+
+温哥华国际机场，温哥华属于加拿大
+
+但温哥华机场并不在温哥华
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/f5f68a2569cb4146bcf8b0d83d043e46.png)
+
+在Richmond
+
+拍摄地点就是温哥华国际机场
+
+此外，在yvr官网还能看到大楼的地图，推断这里是在三楼，因为只有三楼才有用餐的地方
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/cf760928080043f8b0a7ecb29e1d99df.png)
+
+## 挑战4
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/eff3097ed81b4dd289ca7214703df6f3.png)
+
+可以看到对面店铺的名字, 在搜索到的相关图片中，我们发现了它
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/84e71e9b4fe9472ea95bb47d62996765.png)
+
+点击该链接，它将引导到另一个网站，上面清楚的告诉了我们位置：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/e5309f257a4c4b51a7f8dbb036400434.png)
+
+在地图上看看：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/76c0ad8df2254532b5e769e1e20725cd.png)
+
+bing地图上那个电话号码似乎是不对的，可能是他们换了新号码，我在搜索引擎上看看：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/8bae76cd20a94e5da733f940f7a1a4f9.png)
+
+
+**我在这个咖啡店的网站上找到了xss+csrf漏洞！简直不可思议，这是我第一次真实的漏洞挖掘，虽然这是无意的**
+
+**稍后我会发布博客**
