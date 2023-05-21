@@ -1,4 +1,4 @@
-#RedTeamCapstoneChallenge
+# RedTeamCapstoneChallenge
 
 <img src="https://tryhackme-badges.s3.amazonaws.com/Sugobet.png" alt="TryHackMe">
 
