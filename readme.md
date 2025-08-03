@@ -1,6 +1,13 @@
 
 # 我的网络安全之旅
 
+---
+from 8.3.2025
+
+微信公众号：APT250
+
+CSDN：Sugobet
+
 <img src="https://tryhackme-badges.s3.amazonaws.com/Sugobet.png" alt="tryhackme">
 
 **[TryHackMe-Sugobet](https://tryhackme.com/p/Sugobet)**
